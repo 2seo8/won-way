@@ -9,7 +9,7 @@ const content = {
     ['다른 상담 방법은 어떻게 찾나요?', '문의에 대한 추천 결과에서 서버가 제공한 상담 채널과 이유를 확인할 수 있어요. 이 프로토타입은 실제 전화 연결·이메일 발송·예약을 하지 않아요.'],
   ],
 }
-export function HelpDock({ followup = false }: { followup?: boolean }) {
+export function HelpDock({ followup = false, closed = false }: { followup?: boolean; closed?: boolean }) {
   const [tab, setTab] = useState<'faq' | 'support'>('faq')
   const [expanded, setExpanded] = useState(false)
   const panelId = useId()
@@ -25,7 +25,7 @@ export function HelpDock({ followup = false }: { followup?: boolean }) {
     <button className="followup-help-trigger" aria-expanded={expanded} aria-controls={panelId} onClick={() => setExpanded(!expanded)}>빠른 도움말도 볼까요? <span aria-hidden="true">{expanded ? '−' : '＋'}</span></button>
     <div id={panelId} hidden={!expanded} className="followup-help-panel"><p className="followup-help-title">빠른 도움말</p>{body}</div>
   </section>
-  return <details className="help-dock" open>
+  return <details className="help-dock" open={!closed}>
     <summary>빠른 도움말 <span>자주 묻는 질문 · 안내 / 지원</span></summary>
     {body}
   </details>

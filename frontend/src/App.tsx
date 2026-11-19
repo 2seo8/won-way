@@ -74,11 +74,12 @@ export default function App({ api = consultationApi, mockMode = isMock }: { api?
       {view === 'help' && <main className="page-content"><h1>무엇이 궁금하세요?</h1><HelpDock/><button className="primary-button" onClick={enterConsultation}>고객센터에서 문의하기</button></main>}
       {view === 'analysis' && <AnalysisScreen/>}
       {view === 'inquiry' && <main className="page-content inquiry-screen">
-        <p className="eyebrow">고객센터</p><h1>무엇을 도와드릴까요?</h1><p className="lead">상황을 알려주시면 상담 방법을 찾아드려요.</p>
-        <Composer draft={chat.draft} setDraft={chat.setDraft} disabled={chat.pending || !chat.sessionId} send={submitInquiry} submitLabel="AI로 상담 방법 찾기" expanded/>
+        <h1>어떤 일이 있으셨어요?</h1><p className="lead">편하게 말씀해 주세요. 알맞은 방법을 바로 찾아드릴게요.</p>
+        {mockMode && <section className="situation-cards" aria-label="자주 있는 상황"><button disabled={chat.pending} onClick={() => fill(CARD_EXAMPLE)}><strong>카드를 잃어버렸어요</strong><small>결제 문자가 왔어요</small><span aria-hidden="true">›</span></button><button disabled={chat.pending} onClick={() => fill(EXAMPLE)}><strong>자동이체 날짜를 바꾸고 싶어요</strong><small>월급날이 바뀌었어요</small><span aria-hidden="true">›</span></button></section>}
+        <Composer draft={chat.draft} setDraft={chat.setDraft} disabled={chat.pending || !chat.sessionId} send={submitInquiry} submitLabel="이 내용으로 알아보기" placeholder="다른 일이라면 직접 말씀해 주세요" expanded/>
         {loading}{errors}
-        {mockMode && <section className="example-options" aria-label="가상 문의 예시"><span>예시를 누르면 입력창에 채워져요</span><button disabled={chat.pending} onClick={() => fill(EXAMPLE)}>생활비 보내는 날짜 바꾸기 <span>↗</span></button><button disabled={chat.pending} onClick={() => fill(CARD_EXAMPLE)}>카드 분실 후 결제 문자 <span>↗</span></button><small>두 가지 예시와 자동이체 추가 질문만 지원하는 가상 응답이에요. 실제 AI 판단이 아니에요.</small></section>}
-        <HelpDock/>
+        {mockMode && <p className="mock-note">체험용 화면이라 위 두 상황만 안내해요.</p>}
+        <HelpDock closed/>
       </main>}
       {view === 'recommendation' && chat.latest && <RecommendationScreen reply={chat.latest} query={query} mockMode={mockMode} onContinue={channelId => { setSelectedChannel(channelId ?? null); setView('chat') }}/>}
       {view === 'chat' && <main className="chat-page">
