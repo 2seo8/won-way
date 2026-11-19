@@ -151,3 +151,16 @@
 .inquiry-screen>.lead{animation-delay:.04s}.inquiry-screen>.situation-cards{animation-delay:.08s}.inquiry-screen>.composer{animation-delay:.12s}
 @keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 @media(prefers-reduced-motion:reduce){.inquiry-screen>*{animation:none}.situation-cards button{transition:none}}
+
+/* Analysis: 사용자의 말을 읽는 화면. 이전의 보라색 엠블럼은 앱 색과 맞지 않아 쓰지 않는다. */
+.analysis-screen{align-items:stretch;justify-content:center;text-align:left;padding:36px 24px 70px}
+.analysis-body{display:flex;flex-direction:column}
+.analysis-label{font-size:14px;font-weight:700;color:#0076bc;margin:0 0 14px}
+.analysis-quote{margin:0;padding:22px 20px;border-radius:20px;background:#f1f7fc;font-size:20px;line-height:1.7;letter-spacing:-.6px;font-weight:600;color:#172544;overflow-wrap:anywhere;animation:rise .35s ease both}
+.analysis-quote mark{color:inherit;border-radius:6px;padding:1px 3px;margin:0 -1px;background:linear-gradient(#bfe2f6,#bfe2f6) no-repeat left center/0% 100%;animation:mark-sweep .5s ease forwards}
+@keyframes mark-sweep{to{background-size:100% 100%}}
+.analysis-dots{justify-content:flex-start;margin:26px 0 12px}
+.analysis-dots i{background:#0076bc}
+.analysis-dots i:nth-child(2){background:#2e93cb}.analysis-dots i:nth-child(3){background:#66b1da}
+.analysis-sub{font-size:14px;color:#5c6e86;margin:0}
+@media(prefers-reduced-motion:reduce){.analysis-quote,.analysis-quote mark{animation:none}.analysis-quote mark{background-size:100% 100%}}

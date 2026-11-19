@@ -189,14 +189,14 @@ describe('앱 시연 흐름', () => {
     await waitFor(() => expect(screen.getByRole('textbox').hasAttribute('readonly')).toBe(false))
     fireEvent.change(screen.getByRole('textbox'), { target: { value: '자동이체 날짜를 바꾸고 싶어요' } })
     fireEvent.click(screen.getByRole('button', { name: '메시지 전송' }))
-    expect(screen.getByRole('status').textContent).toContain('어떤 상담이 필요한지')
+    expect(screen.getByRole('status').textContent).toContain('말씀하신 내용을 읽고 있어요')
     expect(screen.queryByRole('textbox')).toBeNull()
     expect(screen.queryByRole('log')).toBeNull()
     expect(sendMessage).toHaveBeenCalledTimes(1)
     await act(async () => { resolveReply({ ...reply('analysis'), responseType: 'FOLLOW_UP', message: '타행인가요?' }) })
     expect(screen.getByRole('log').textContent).toContain('타행인가요?')
     expect(screen.getByRole('textbox')).toBeTruthy()
-    expect(screen.queryByText(/어떤 상담이 필요한지/)).toBeNull()
+    expect(screen.queryByText(/말씀하신 내용을 읽고 있어요/)).toBeNull()
   })
   it('분석 중 오류가 나면 입력을 보존한 문의 화면으로 돌아간다', async () => {
     let failReply!: (reason: Error) => void
@@ -209,7 +209,7 @@ describe('앱 시연 흐름', () => {
     await act(async () => { failReply(new ApiError('TIMEOUT', '응답 지연')) })
     expect(screen.getByRole('alert').textContent).toContain('응답 지연')
     expect((screen.getByRole('textbox') as HTMLTextAreaElement).value).toBe('보존할 문의')
-    expect(screen.queryByText(/어떤 상담이 필요한지/)).toBeNull()
+    expect(screen.queryByText(/말씀하신 내용을 읽고 있어요/)).toBeNull()
   })
   it('분석 중 홈으로 이동하면 늦은 응답이 화면을 강제로 전환하지 않는다', async () => {
     let resolveReply!: (value: Reply) => void

@@ -19,6 +19,7 @@ export default function App({ api = consultationApi, mockMode = isMock }: { api?
   const [view, setView] = useState<View>('home')
   const [menu, setMenu] = useState<DemoMenu>('transfer')
   const [query, setQuery] = useState('')
+  const [reading, setReading] = useState('')
   const [selectedChannel, setSelectedChannel] = useState<string | null>(null)
   const [transfer, setTransfer] = useState(initialDemoTransfer)
   const end = useRef<HTMLDivElement>(null)
@@ -45,8 +46,11 @@ export default function App({ api = consultationApi, mockMode = isMock }: { api?
     const submitted = chat.draft.trim()
     if (!submitted || chat.pending || !chat.sessionId) return
     const attempt = ++inquiryAttempt.current
-    setView('analysis')
+    setReading(submitted); setView('analysis')
+    const started = Date.now()
     const result = await chat.send()
+    // 체험 모드는 응답이 즉시 와서 "읽는 중" 화면이 스쳐 지나가므로 잠깐 보여 준다. 실제 API 응답은 늦추지 않는다.
+    if (mockMode && import.meta.env.MODE !== 'test') await new Promise(resolve => setTimeout(resolve, Math.max(0, 1800 - (Date.now() - started))))
     if (attempt !== inquiryAttempt.current) return
     if (result) { setQuery(submitted); setView(result.responseType === 'CHANNEL_RECOMMENDATION' ? 'recommendation' : 'chat') }
     else setView('inquiry')
@@ -72,7 +76,7 @@ export default function App({ api = consultationApi, mockMode = isMock }: { api?
     <div id="screen" className={`screen-view view-${view}`} ref={main} tabIndex={-1}>
       {view === 'home' && <HomeScreen onConsult={enterConsultation} onTransfer={() => mockMode ? openMenu('transfer') : enterConsultation()} onHelp={() => setView('help')}/>}
       {view === 'help' && <main className="page-content"><h1>무엇이 궁금하세요?</h1><HelpDock/><button className="primary-button" onClick={enterConsultation}>고객센터에서 문의하기</button></main>}
-      {view === 'analysis' && <AnalysisScreen/>}
+      {view === 'analysis' && <AnalysisScreen message={reading}/>}
       {view === 'inquiry' && <main className="page-content inquiry-screen">
         <h1>어떤 일이 있으셨어요?</h1><p className="lead">편하게 말씀해 주세요. 알맞은 방법을 바로 찾아드릴게요.</p>
         {mockMode && <section className="situation-cards" aria-label="자주 있는 상황"><button disabled={chat.pending} onClick={() => fill(CARD_EXAMPLE)}><strong>카드를 잃어버렸어요</strong><small>결제 문자가 왔어요</small><span aria-hidden="true">›</span></button><button disabled={chat.pending} onClick={() => fill(EXAMPLE)}><strong>자동이체 날짜를 바꾸고 싶어요</strong><small>월급날이 바뀌었어요</small><span aria-hidden="true">›</span></button></section>}
