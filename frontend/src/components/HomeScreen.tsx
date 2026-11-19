@@ -28,7 +28,7 @@ export function HomeScreen({ onConsult, onTransfer, onHelp }: { onConsult: () =>
         <button className="account-shortcut" onClick={onTransfer}><Icon name="calendar"/>이번 달 자동이체 확인하기<Icon name="arrow"/></button>
       </section>
       <button className="secondary-button all-accounts" onClick={() => setNotice(!notice)}>전체계좌 보기</button>
-      <button className="ai-entry" onClick={onConsult}><span className="headset-icon"><Icon name="headset"/></span><span><small>은행 업무가 막막할 때</small><strong>WON길 AI 고객센터</strong></span><Icon name="arrow"/></button>
+      <button className="ai-entry" onClick={onConsult}><span className="headset-icon"><Icon name="headset"/></span><span><small>은행 업무가 막막할 때</small><strong>WON길 고객센터</strong></span><Icon name="arrow"/></button>
       <h2 className="section-title">추천 서비스</h2>
       <div className="service-grid"><button onClick={onTransfer}><Icon name="calendar"/><span>자동이체 관리</span><span aria-hidden="true">›</span></button><button onClick={onHelp}><Icon name="file"/><span>자주 묻는 질문</span><span aria-hidden="true">›</span></button></div>
       <p className="home-note">복잡한 은행 업무, 어디서 시작할지 함께 찾아요.</p>
