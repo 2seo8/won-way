@@ -253,7 +253,7 @@ describe('앱 시연 흐름', () => {
     await screen.findByText('등록한 채널은 무엇인가요?')
     fireEvent.change(screen.getByRole('textbox'), { target: { value: '모바일 앱이에요' } })
     fireEvent.click(screen.getByRole('button', { name: '메시지 전송' }))
-    fireEvent.click(await screen.findByRole('button', { name: 'AI로 해결하기' }))
+    fireEvent.click(await screen.findByRole('button', { name: '바로 해결하기' }))
     fireEvent.click(screen.getByRole('button', { name: /자동이체 메뉴 열기/ }))
     expect(screen.getByRole('main', { name: '자동이체 메뉴 데모' })).toBeTruthy()
     fireEvent.click(screen.getAllByRole('button', { name: '상담으로 돌아가기' })[0])
@@ -280,10 +280,10 @@ describe('앱 시연 흐름', () => {
     expect(screen.getByRole('button', { name: '자주 묻는 질문' })).toBeTruthy()
     expect(send).not.toHaveBeenCalled()
     fireEvent.click(screen.getByRole('button', { name: '메시지 전송' }))
-    expect(await screen.findByRole('heading', { name: 'AI로 해결할 수 있어요' })).toBeTruthy()
+    expect(await screen.findByRole('heading', { name: '바로 해결할 수 있어요' })).toBeTruthy()
     expect(screen.queryByRole('log')).toBeNull()
     expect(screen.queryByRole('button', { name: '자동이체 메뉴 열기' })).toBeNull()
-    fireEvent.click(screen.getByRole('button', { name: 'AI로 해결하기' }))
+    fireEvent.click(screen.getByRole('button', { name: '바로 해결하기' }))
     expect(screen.getByRole('log').textContent).toContain(EXAMPLE)
     expect(send).toHaveBeenCalledTimes(1)
     const helpTrigger = screen.getByRole('button', { name: /빠른 도움말도 볼까요/ })
@@ -323,7 +323,7 @@ describe('앱 시연 흐름', () => {
     await waitFor(() => expect(screen.getByRole('button', { name: /카드를 잃어버렸어요/ }).hasAttribute('disabled')).toBe(false))
     fireEvent.click(screen.getByRole('button', { name: /카드를 잃어버렸어요/ }))
     fireEvent.click(screen.getByRole('button', { name: '메시지 전송' }))
-    fireEvent.click(await screen.findByRole('button', { name: 'AI로 해결하기' }))
+    fireEvent.click(await screen.findByRole('button', { name: '바로 해결하기' }))
     fireEvent.click(screen.getByRole('button', { name: /카드 분실 안내 메뉴 열기/ }))
     expect(screen.getByText('실제 분실 신고·이용 정지를 하지 않았어요.')).toBeTruthy()
     expect(screen.queryByRole('button', { name: '신고하기' })).toBeNull()
@@ -341,7 +341,7 @@ describe('앱 시연 흐름', () => {
     fireEvent.click(screen.getByRole('button', { name: '메시지 전송' }))
     fireEvent.click(await screen.findByRole('button', { name: '챗봇/채팅상담 선택하기' }))
     expect(screen.queryByRole('button', { name: /자동이체 메뉴 열기/ })).toBeNull()
-    expect(screen.queryByText('AI로 해결할 수 있어요')).toBeNull()
+    expect(screen.queryByText('바로 해결할 수 있어요')).toBeNull()
     expect(screen.getByRole('link', { name: /채널 공식 안내 보기/ }).getAttribute('href')).toBe('https://spot.wooribank.com/')
   })
 })
@@ -380,16 +380,14 @@ describe('실제 연동 준비', () => {
       expect(fetchMock).toHaveBeenCalledTimes(1)
     } finally { vi.useRealTimers() }
   })
-  it('추천이 세 개면 모두 표시하고 첫 채널만 활성화한다', () => {
+  it('추천이 세 개면 첫 채널을 답으로, 나머지는 다른 방법으로 보여 준다', () => {
     const recommendations = ['챗봇/채팅상담', '전화상담', '영업점'].map((name, index) => ({ channelId: `channel-${index}`, name, reason: `${name} 근거`, score: 90 - index, processable: true }))
     const result: Reply = { ...reply('test'), responseType: 'CHANNEL_RECOMMENDATION', recommendations }
     render(<RecommendationScreen reply={result} query="문의" mockMode={false} onContinue={() => {}}/>)
     expect(screen.getByRole('heading', { name: '챗봇/채팅상담' })).toBeTruthy()
-    expect(screen.getByRole('heading', { name: '전화상담' })).toBeTruthy()
     const others = screen.getByRole('region', { name: '다른 상담 방법' })
     expect([...others.querySelectorAll('article h2')].map(node => node.textContent)).toEqual(['전화상담', '영업점'])
-    expect((screen.getByRole('button', { name: '전화상담 선택하기' }) as HTMLButtonElement).disabled).toBe(true)
-    expect((screen.getByRole('button', { name: '영업점 선택하기' }) as HTMLButtonElement).disabled).toBe(true)
+    expect(others.querySelector('button')).toBeNull()
   })
   it('누락된 선택 필드를 정규화하고 응답 세션·출처를 검증한다', () => {
     const raw = { sessionId: 'test', answer: '안내' }

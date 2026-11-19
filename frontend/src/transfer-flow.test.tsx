@@ -15,7 +15,7 @@ async function openTransfer(api = createMockApi(0)) {
   await waitFor(() => expect((screen.getByRole('button', { name: /자동이체 날짜를 바꾸고 싶어요/ }) as HTMLButtonElement).disabled).toBe(false))
   fireEvent.click(screen.getByRole('button', { name: /자동이체 날짜를 바꾸고 싶어요/ }))
   fireEvent.click(screen.getByRole('button', { name: '메시지 전송' }))
-  fireEvent.click(await screen.findByRole('button', { name: 'AI로 해결하기' }))
+  fireEvent.click(await screen.findByRole('button', { name: '바로 해결하기' }))
   fireEvent.click(screen.getByRole('button', { name: /자동이체 메뉴 열기/ }))
   fireEvent.click(screen.getByRole('button', { name: /생활비 자동이체/ }))
 }

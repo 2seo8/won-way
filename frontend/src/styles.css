@@ -164,3 +164,32 @@
 .analysis-dots i:nth-child(2){background:#2e93cb}.analysis-dots i:nth-child(3){background:#66b1da}
 .analysis-sub{font-size:14px;color:#5c6e86;margin:0}
 @media(prefers-reduced-motion:reduce){.analysis-quote,.analysis-quote mark{animation:none}.analysis-quote mark{background-size:100% 100%}}
+
+/* Result: 이해한 내용 → 가장 빠른 방법 하나 → 다른 방법(접힘). 순위·점수 같은 내부 표현은 쓰지 않는다. */
+.result-screen{padding-top:22px}
+.result-screen>*{animation:rise .35s ease both}
+.result-screen>h1{animation-delay:.06s}.result-screen>.rs-answer{animation-delay:.12s}
+.rs-understood{display:flex;flex-direction:column;gap:5px;padding:2px 0 2px 14px;border-left:3px solid #9fd0ec;margin-bottom:26px;overflow-wrap:anywhere}
+.rs-understood small{font-size:12px;font-weight:700;color:#0076bc}
+.rs-understood strong{font-size:17px;line-height:1.5;color:#172544;letter-spacing:-.4px}
+.rs-understood span{font-size:13px;color:#5c6e86}
+.result-screen>h1{font-size:28px;letter-spacing:-1.2px;margin:0 0 18px}
+.rs-answer{background:#f1f7fc;border-radius:20px;padding:22px 20px}
+.rs-answer h2{display:flex;align-items:center;gap:11px;margin:0 0 14px;font-size:21px;letter-spacing:-.6px}
+.rs-icon{display:grid;place-items:center;width:38px;height:38px;border-radius:50%;background:#0076bc;color:#fff;flex-shrink:0}
+.rs-icon svg{width:21px;height:21px}
+.rs-answer ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
+.rs-answer li{position:relative;padding-left:24px;font-size:15px;line-height:1.7;color:#2f4663}
+.rs-answer li::before{content:"✓";position:absolute;left:2px;top:0;color:#0076bc;font-weight:800}
+.rs-caution{margin:12px 0 0;font-size:13px;color:#8b302a}
+.rs-others{margin-top:14px}
+.rs-others summary{display:flex;align-items:center;justify-content:space-between;min-height:48px;padding:0 4px;font-size:15px;font-weight:700;color:#0069a8;list-style:none}
+.rs-others summary::-webkit-details-marker{display:none}
+.rs-others summary::after{content:"＋";font-size:18px;font-weight:400}
+.rs-others details[open] summary::after{content:"−"}
+.rs-others article{padding:14px 4px;border-top:1px solid #e8eef4}
+.rs-others article h2{font-size:16px;margin:0 0 4px}
+.rs-others article p{font-size:14px;line-height:1.7;color:#5c6e86;margin:4px 0 0}
+.rs-foot{position:sticky;bottom:0;margin-top:auto;padding:22px 0 14px;background:linear-gradient(rgba(255,255,255,0),#fff 28%)}
+.rs-foot p{font-size:12px;color:#7a889c;text-align:center;margin:0 0 10px}
+@media(prefers-reduced-motion:reduce){.result-screen>*{animation:none}}

@@ -66,7 +66,7 @@ export default function App({ api = consultationApi, mockMode = isMock }: { api?
     if (await chat.finishConsultation()) { setSelectedChannel(null); setQuery(''); setView('ended') }
   }
   function goHome() { inquiryAttempt.current++; setView('home') }
-  const heading = { home: 'WON길', inquiry: '고객센터', analysis: '고객센터', recommendation: 'AI 추천 결과', chat: '고객센터', business: menu === 'transfer' ? '자동이체' : '카드 분실 안내', help: '도움말', ended: '고객센터' }[view]
+  const heading = { home: 'WON길', inquiry: '고객센터', analysis: '고객센터', recommendation: '알맞은 방법', chat: '고객센터', business: menu === 'transfer' ? '자동이체' : '카드 분실 안내', help: '도움말', ended: '고객센터' }[view]
   const errors = <>{chat.cleanupError && <div className="error" role="alert"><strong>이전 상담 종료 확인 필요</strong><p>{chat.cleanupError}</p></div>}{chat.error && <div className="error" role="alert"><strong>요청을 완료하지 못했어요</strong><p>{chat.error.message}</p><small>{chat.error.code} · 자동 재전송하지 않아요.</small>{!chat.sessionId && <button className="secondary-button" onClick={reset}>상담 다시 시작</button>}</div>}</>
   const loading = chat.pending && <div className="loading" role="status"><div className="loading-dots" aria-hidden="true"><i/><i/><i/></div><p>{chat.sessionId ? '문의 내용을 확인하고 있어요' : '새 상담을 준비하고 있어요'}</p></div>
   return <div className="workspace"><div className="app-shell">
