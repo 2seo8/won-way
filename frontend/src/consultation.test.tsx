@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { StrictMode } from 'react'
-import { act, cleanup, fireEvent, render, renderHook, screen, waitFor } from '@testing-library/react'
+import { act, cleanup, fireEvent, render, renderHook, screen, waitFor, within } from '@testing-library/react'
 import { createMockApi, EXAMPLE, CARD_EXAMPLE, QUESTION, getMockPresentation } from './mocks/consultation'
 import { useConsultation } from './hooks/useConsultation'
 import { adaptReply, adaptSession, officialUrl } from './api/adapter'
@@ -323,7 +323,9 @@ describe('앱 시연 흐름', () => {
     await waitFor(() => expect(screen.getByRole('button', { name: /카드를 잃어버렸어요/ }).hasAttribute('disabled')).toBe(false))
     fireEvent.click(screen.getByRole('button', { name: /카드를 잃어버렸어요/ }))
     fireEvent.click(screen.getByRole('button', { name: '메시지 전송' }))
-    fireEvent.click(await screen.findByRole('button', { name: '바로 해결하기' }))
+    expect(await screen.findByRole('heading', { name: '이 방법이 가장 빨라요' })).toBeTruthy()
+    expect(screen.queryByRole('button', { name: /이메일/ })).toBeNull()
+    fireEvent.click(screen.getByRole('button', { name: '챗봇/채팅상담 선택하기' }))
     fireEvent.click(screen.getByRole('button', { name: /카드 분실 안내 메뉴 열기/ }))
     expect(screen.getByText('실제 분실 신고·이용 정지를 하지 않았어요.')).toBeTruthy()
     expect(screen.queryByRole('button', { name: '신고하기' })).toBeNull()
@@ -387,7 +389,7 @@ describe('실제 연동 준비', () => {
     expect(screen.getByRole('heading', { name: '챗봇/채팅상담' })).toBeTruthy()
     const others = screen.getByRole('region', { name: '다른 상담 방법' })
     expect([...others.querySelectorAll('article h2')].map(node => node.textContent)).toEqual(['전화상담', '영업점'])
-    expect(others.querySelector('button')).toBeNull()
+    expect(within(others).getAllByRole('button').map(node => node.textContent)).toEqual(['전화상담 선택하기', '영업점 선택하기'])
   })
   it('누락된 선택 필드를 정규화하고 응답 세션·출처를 검증한다', () => {
     const raw = { sessionId: 'test', answer: '안내' }

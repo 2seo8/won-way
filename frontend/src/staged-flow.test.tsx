@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { afterEach, expect, it, vi } from 'vitest'
-import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import App from './App'
 import { adaptReply } from './api/adapter'
 import type { ConsultationApi } from './types/consultation'
@@ -36,7 +36,7 @@ it('모든 추천을 펼쳐 보여주고 첫 채널만 활성화하며 업무 �
   const others = screen.getByRole('region', { name: '다른 상담 방법' })
   expect(others.textContent).toContain('전화 상담')
   expect(others.textContent).toContain('이메일 상담')
-  expect(others.querySelector('button')).toBeNull()
+  expect(within(others).getByRole('button', { name: '전화 상담 선택하기' })).toBeTruthy()
   expect(screen.queryByText(/순위/)).toBeNull()
   fireEvent.click(screen.getByRole('button', { name: '바로 해결하기' }))
   expect(screen.getByRole('button', { name: /자동이체 메뉴 열기/ })).toBeTruthy()

@@ -4,6 +4,7 @@ export const EXAMPLE = '월급날이 25일로 바뀌어서, 엄마한테 매달 
 export const CARD_EXAMPLE = '카드 잃어버렸는데 결제 문자가 왔어.'
 export const QUESTION = '변경 전에 뭘 확인하면 되나요?'
 const PHONE_REASON = '바로 통화로 확인하고 싶을 때 좋아요.'
+const CARD_PHONE_REASON = '카드를 잃어버렸다면 바로 통화로 확인하는 게 가장 빨라요.'
 const EMAIL_REASON = '급하지 않다면 답변을 받아 천천히 확인할 수 있어요.'
 export type DemoMenu = 'transfer' | 'card'
 interface MockPresentation { menu: DemoMenu; intent: string; detail: string; actionLabel: string }
@@ -43,10 +44,14 @@ export function createMockApi(delay = 900): ConsultationApi {
         const reason = transfer ? '생활비를 보내는 날짜를 바꾸려는 문의예요. AI 안내에서 자동이체 조회·변경 메뉴를 찾을 수 있어요.' : '카드를 잃어버리고 결제 문자를 받았다는 문의예요. 카드 분실 관련 메뉴를 확인하도록 안내해요.'
         const result: Reply = { ...base, responseType: 'CHANNEL_RECOMMENDATION',
           message: transfer ? '생활비를 보내는 날짜를 바꾸고 싶으시군요.\n아래 버튼으로 자동이체 메뉴를 열고, 등록 내역을 확인해 주세요. 변경 가능 여부와 적용 시점은 해당 업무 화면에서 확인해야 해요.' : '카드 분실 후 결제 문자를 받으셨다고 말씀하셨어요.\n아래 버튼으로 카드 분실 안내 메뉴를 확인할 수 있어요. 이 프로토타입은 실제 분실 신고나 결제 확인을 하지 않아요.',
-          recommendations: [
+          recommendations: transfer ? [
           { channelId: 'CHATBOT', name: '챗봇/채팅상담', score: 95, rank: 1, processable: true, reason, reasons: [reason] },
           { channelId: 'PHONE', name: '전화상담', score: 80, rank: 2, processable: true, reason: PHONE_REASON, reasons: [PHONE_REASON] },
           { channelId: 'EMAIL', name: '이메일 상담', score: 60, rank: 3, processable: true, reason: EMAIL_REASON, reasons: [EMAIL_REASON] },
+        ] : [
+          // 카드 분실은 긴급 상황이라 전화가 먼저이고, 이메일은 우리카드 이메일 상담 운영 정보가 없어 제외된다(백엔드 평가 기준).
+          { channelId: 'PHONE', name: '전화상담', score: 83, rank: 1, processable: true, reason: CARD_PHONE_REASON, reasons: [CARD_PHONE_REASON] },
+          { channelId: 'CHATBOT', name: '챗봇/채팅상담', score: 77, rank: 2, processable: true, reason, reasons: [reason] },
         ],
           summary: transfer ? '월급날 변경으로 엄마에게 보내는 생활비 이체일을 매달 20일에서 26일로 변경하고 싶다는 고객 진술. 등록 내역, 변경 가능 여부와 적용 시점은 미확인. 자동이체 메뉴로 안내했으며 실제 변경은 하지 않음.' : '카드를 잃어버린 후 결제 문자를 받았다는 고객 진술. 카드 분실 안내 메뉴로 안내했으며 실제 신고·결제 조회는 하지 않음.',
         }

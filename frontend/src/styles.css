@@ -193,3 +193,4 @@
 .rs-foot{position:sticky;bottom:0;margin-top:auto;padding:22px 0 14px;background:linear-gradient(rgba(255,255,255,0),#fff 28%)}
 .rs-foot p{font-size:12px;color:#7a889c;text-align:center;margin:0 0 10px}
 @media(prefers-reduced-motion:reduce){.result-screen>*{animation:none}}
+.rs-others .rs-pick{margin-top:8px;min-height:40px;padding:0 14px;border:1px solid #9fd0ec;border-radius:12px;color:#0069a8;font-size:14px;font-weight:700;background:#fff}

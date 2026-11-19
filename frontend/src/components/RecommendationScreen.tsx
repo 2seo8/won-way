@@ -24,7 +24,7 @@ export function RecommendationScreen({ reply, query, mockMode, onContinue }: { r
     {others.length > 0 && <section className="rs-others" aria-label="다른 상담 방법">
       <details>
         <summary>다른 방법도 있어요</summary>
-        {others.map(item => <article key={item.channelId}><h2>{item.name}</h2>{(item.reasons ?? [item.reason]).map((reason, i) => <p key={i}>{reason}</p>)}</article>)}
+        {others.map(item => <article key={item.channelId}><h2>{item.name}</h2>{(item.reasons ?? [item.reason]).map((reason, i) => <p key={i}>{reason}</p>)}<button type="button" className="rs-pick" onClick={() => onContinue(item.channelId)}>{item.name} 선택하기</button></article>)}
       </details>
     </section>}
     <div className="rs-foot">
